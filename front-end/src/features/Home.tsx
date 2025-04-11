@@ -1,18 +1,17 @@
-function Home() {
+import LogoTitle from "../ui/LogoTitle";
+import MainMenu from "../ui/MainMenu";
+
+const Home = () => {
   return (
+    // Div for background
     <div className="relative h-screen w-screen bg-[url(/fieldLineFocused.jpg)] bg-cover">
-      <div className="absolute top-[50%] left-[50%] w-[50vw] -translate-1/2 rounded-[5px] bg-neutral-300/70 p-12">
-        <div className="flex items-center justify-center">
-          <img
-            src="/soccer-player.png"
-            alt="Soccer Manager Logo"
-            className="inline-block h-auto w-32"
-          />
-          <h1 className="lato-regular-italic inline-block text-5xl text-green-800">
-            Soccer Manager
-          </h1>
-        </div>
-        <div className="space-y-2">
+      {/* Text container */}
+      <div className="absolute top-[50%] left-[50%] w-[50vw] -translate-1/2 rounded-[5px] bg-neutral-300/70 px-12 py-8">
+        {/* Image and title */}
+        <LogoTitle kind="title" />
+
+        {/* Text */}
+        <div className="mt-4 space-y-2">
           <p className="text-lg">
             Soccer Manager is a project to train both typescript and forms.
           </p>
@@ -26,9 +25,14 @@ function Home() {
             when we play!)
           </p>
         </div>
+
+        {/* Buttons */}
+        <div>
+          <MainMenu />
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default Home;
