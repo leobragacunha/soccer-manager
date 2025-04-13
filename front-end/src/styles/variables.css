@@ -1,1 +1,9 @@
+:root {
+  --color1: #e1c072;
+  --color2: #fdeaa7;
+  --color3: #725b16;
 
+  --player-image: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/214624/Ronaldo.png";
+  --country-image: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/214624/portugal.png";
+  --club-image: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/214624/Juventus_Logo.png";
+}

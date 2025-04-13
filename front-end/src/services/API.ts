@@ -1,8 +1,7 @@
-import axios from "axios";
 import { API_URL } from "../utils/constants";
 
 //Player Schema
-interface Player {
+export interface Player {
   id: string;
   name: string;
   nickName: string;
@@ -32,56 +31,46 @@ interface Player {
 //   physics: 70,
 // };
 
-// export const createPlayer = async (player: Player) => {
-//   try {
-//     const response = await fetch(`${API_URL}/players`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(player),
-//     });
+export const getPlayers = async () => {
+  try {
+    const response = await fetch(`${API_URL}/players`, { method: "GET" });
 
-//     console.log(response);
+    if (!response.ok) {
+      throw new Error("RESPONSE ERROR");
+    }
 
-//     if (!response.ok) {
-//       throw new Error("Erro na requisição");
-//     }
-//     console.log(JSON.stringify(player));
+    const data: Player = await response.json();
 
-//     const data = await response.json();
-
-//     console.log(data);
-
-//     return data;
-//   } catch (error: any) {
-//     console.error(`Error: ${error.message}`);
-//     throw error;
-//   }
-// };
+    return data;
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error.";
+    console.error(`Error fetching data 9${errorMessage}`);
+    throw errorMessage;
+  }
+};
 
 export const createPlayer = async (player: Player) => {
   try {
-    const response = await axios.post(`${API_URL}/players`, player, {
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = await fetch(`${API_URL}/players`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(player),
     });
 
-    // console.log("Status da resposta:", response.status);
-    // if (response.status === 302 || response.status === 301) {
-    //   console.log(
-    //     "Redirecionamento detectado:",
-    //     response.headers.get("Location"),
-    //   );
-    // }
-
-    if (!response.data) {
-      throw new Error(`Erro na requisição: ${response.statusText}`);
+    if (!response.ok) {
+      throw new Error("RESPONSE ERROR!");
     }
 
-    const data = await response.data;
+    const data = await response.json();
+
+    // console.log(data);
+
     return data;
-  } catch (error: any) {
-    console.error("Erro em createPlayer:", error);
-    throw error;
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    console.error(`Error: ${errorMessage}`);
+    throw errorMessage;
   }
 };
