@@ -27,6 +27,36 @@
       "dribbling": 90,
       "defense": 70,
       "physics": 70
+    },
+    {
+      "id": "20f8",
+      "name": "Test Player",
+      "nickName": "Test Nick",
+      "foot": "left",
+      "height": "175",
+      "speed": 50,
+      "stamina": 50,
+      "pass": 50,
+      "shoot": 50,
+      "dribble": 50,
+      "defense": 50
+    },
+    {
+      "id": "05b3",
+      "name": "Test with pic",
+      "nickName": "tpic",
+      "foot": "both",
+      "height": 175,
+      "speed": 50,
+      "stamina": 50,
+      "pass": 50,
+      "shoot": 50,
+      "dribble": 50,
+      "defense": 50,
+      "profile-pic": {},
+      "profilePic": {
+        "0": {}
+      }
     }
   ]
 }

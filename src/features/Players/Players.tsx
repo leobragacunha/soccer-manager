@@ -2,8 +2,11 @@ import { useCallback } from "react";
 import { createPlayer, getPlayers, Player } from "../../services/API";
 import { v4 as uuidv4 } from "uuid";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
 
 const Players = () => {
+  const navigate = useNavigate();
+
   const {
     data: players,
     isPending,
@@ -19,15 +22,14 @@ const Players = () => {
   //   id: `${uuidv4()}`,
   //   name: "Rafael Braga Cunha",
   //   nickName: "Rafonesz",
-  //   height: 169,
   //   foot: "left",
+  //   height: 169,
   //   speed: 70,
   //   stamina: 80,
   //   pass: 85,
   //   shoot: 85,
   //   dribbling: 90,
   //   defense: 70,
-  //   physics: 70,
   // };
 
   // const handleCreatePlayer = useCallback(
@@ -52,7 +54,10 @@ const Players = () => {
         {/* Header from section */}
         <div className="flex items-center justify-between border-b-2 border-green-800 pb-4">
           <h1 className="text-5xl text-green-800">Players</h1>
-          <button className="duration:300 rounded-[5px] bg-green-800 p-2 text-xl text-white transition-colors hover:bg-white hover:text-green-800">
+          <button
+            onClick={() => navigate("/players/new-player")}
+            className="duration:300 rounded-[5px] bg-green-800 p-2 text-xl text-white transition-colors hover:bg-white hover:text-green-800"
+          >
             + New Player
           </button>
         </div>

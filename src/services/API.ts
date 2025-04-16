@@ -11,9 +11,10 @@ export interface Player {
   stamina: number;
   pass: number;
   shoot: number;
-  dribbling: number;
+  dribble: number;
   defense: number;
   physics: number;
+  profilePic: FileList;
 }
 
 // const player: Player = {
