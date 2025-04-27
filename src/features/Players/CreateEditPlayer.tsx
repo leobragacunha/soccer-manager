@@ -1,11 +1,15 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import { createPlayer, Player } from "../../services/API";
+import { createPlayer } from "../../services/API";
 import { useMutation } from "@tanstack/react-query";
+import { Player } from "../../utils/typing";
+import { removeBg } from "../../utils/helpers";
+import { useNavigate } from "react-router";
 
 const CreateEditPlayer = () => {
   // React-Hook-Form
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<Player>({
@@ -23,18 +27,23 @@ const CreateEditPlayer = () => {
     },
   });
 
+  const navigate = useNavigate();
+  const selectedFile = watch("profilePic");
+
   const createPlayerMutation = useMutation({
     mutationFn: (player: Player) => createPlayer(player),
     onSuccess: () => {
       console.log("Mutation function ran ok!");
+      navigate("/players");
     },
-    onError: () => {
-      console.log("Error with mutation function");
+    onError: (error) => {
+      console.log("Error with mutation function", error);
     },
   });
 
   const onSubmit: SubmitHandler<Player> = (data) => {
-    console.log(data.profilePic);
+    if (!data.profilePic?.[0]) delete data.profilePic;
+    // console.log(data);
     createPlayerMutation.mutate(data);
   };
 
@@ -50,7 +59,7 @@ const CreateEditPlayer = () => {
         <div className="flex flex-1">
           {/* Form */}
           <form
-            className="m-2 grid flex-[1_1_10%] grid-cols-4 grid-rows-[1fr_0.5fr_1fr_0.5fr_1fr_0.5fr_1fr_0.5fr_1fr_0.5fr_1fr_0.5fr_1fr_1fr] gap-2 gap-x-4"
+            className="m-2 grid flex-[1_1_10%] grid-cols-4 grid-rows-[1fr_0.5fr_1fr_0.5fr_1fr_0.5fr_1fr_0.5fr_1fr_0.5fr_1fr_0.5fr_0.5fr_1fr_1fr] gap-2 gap-x-4"
             onSubmit={handleSubmit(onSubmit)}
           >
             <label
@@ -246,9 +255,20 @@ const CreateEditPlayer = () => {
               {errors.defense?.message}
             </p>
 
+            <input
+              type="checkbox"
+              id="isLegend"
+              value="legend"
+              className="col-start-1 row-start-13"
+              {...register("isLegend")}
+            />
+            <label htmlFor="isLegend" className="col-start-2 row-start-13">
+              He is a legend!
+            </label>
+
             <label
               htmlFor="profilePic"
-              className="col-span-2 col-start-1 row-start-13 w-40 cursor-pointer rounded-[5px] bg-green-800 p-2 text-center text-white transition duration-300 hover:bg-white hover:text-green-800"
+              className="col-span-2 col-start-1 row-start-14 w-40 cursor-pointer rounded-[5px] bg-green-800 p-2 text-center text-white transition duration-300 hover:bg-white hover:text-green-800"
             >
               Upload a profile pic
             </label>
@@ -259,15 +279,20 @@ const CreateEditPlayer = () => {
               className="hidden"
               {...register("profilePic")}
             />
+            <p className="col-span-2 col-start-2 row-start-14">
+              {selectedFile &&
+                selectedFile.length > 0 &&
+                selectedFile?.[0].name}
+            </p>
 
             <button
-              className="col-span-2 col-start-1 row-start-14 w-30 cursor-pointer justify-self-start rounded-[5px] border-2 border-green-800 text-green-800 transition duration-300 hover:bg-white"
+              className="col-span-2 col-start-1 row-start-15 w-30 cursor-pointer justify-self-start rounded-[5px] border-2 border-green-800 text-green-800 transition duration-300 hover:bg-white"
               type="reset"
             >
               Clear
             </button>
             <button
-              className="col-span-2 col-start-4 row-start-14 w-30 justify-self-end-safe rounded-[5px] border-2 border-green-800 bg-green-800 text-white transition duration-300 hover:bg-white hover:text-green-800"
+              className="col-span-2 col-start-4 row-start-15 w-30 justify-self-end-safe rounded-[5px] border-2 border-green-800 bg-green-800 text-white transition duration-300 hover:bg-white hover:text-green-800"
               type="submit"
             >
               Create

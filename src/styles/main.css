@@ -5,6 +5,7 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 
 @import "./typography.css";
+@import "./card.css";
 
 @layer base {
   body {

@@ -1,8 +1,8 @@
-import { useCallback } from "react";
-import { createPlayer, getPlayers, Player } from "../../services/API";
-import { v4 as uuidv4 } from "uuid";
+import { getPlayers } from "../../services/API";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import PlayerCard from "./PlayerCard";
+import { PlayerFromDB } from "../../utils/typing";
 
 const Players = () => {
   const navigate = useNavigate();
@@ -18,36 +18,6 @@ const Players = () => {
 
   if (isPending) return <div>Loading</div>;
 
-  // const player: Player = {
-  //   id: `${uuidv4()}`,
-  //   name: "Rafael Braga Cunha",
-  //   nickName: "Rafonesz",
-  //   foot: "left",
-  //   height: 169,
-  //   speed: 70,
-  //   stamina: 80,
-  //   pass: 85,
-  //   shoot: 85,
-  //   dribbling: 90,
-  //   defense: 70,
-  // };
-
-  // const handleCreatePlayer = useCallback(
-  //   async (e: React.MouseEvent<HTMLButtonElement>) => {
-  //     e.preventDefault();
-  //     try {
-  //       const result = await createPlayer(player);
-  //       console.log("Resultado:", result);
-  //     } catch (error: unknown) {
-  //       const errorMessage =
-  //         error instanceof Error ? error.message : "Unknown error";
-  //       console.error(`Error creating player: ${errorMessage}`);
-  //     }
-  //   },
-  //   [player],
-  // );
-
-  //
   return (
     <div className="flex h-screen flex-1 bg-[url(/fieldFromAboveBall.jpg)] bg-cover">
       <div className="m-4 flex-1 rounded-[5px] bg-neutral-300/70 p-4">
@@ -63,9 +33,11 @@ const Players = () => {
         </div>
 
         {/* Players section */}
-        <ul>
-          {players.map((player: Player) => (
-            <li key={player.id}>{player.name}</li>
+        <ul className="flex flex-wrap gap-2">
+          {players.map((player: PlayerFromDB) => (
+            <li key={player.id}>
+              <PlayerCard player={player} />
+            </li>
           ))}
         </ul>
       </div>

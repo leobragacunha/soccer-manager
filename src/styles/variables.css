@@ -1,9 +1,21 @@
 :root {
-  --color1: #e1c072;
-  --color2: #fdeaa7;
-  --color3: #725b16;
+  --color-bronze-rank: #412918;
+  --color-bronze-text: #3e2714;
+  --color-bronze-border: #cfa283;
 
-  --player-image: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/214624/Ronaldo.png";
-  --country-image: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/214624/portugal.png";
-  --club-image: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/214624/Juventus_Logo.png";
+  --color-silver-text: #212b2c;
+  --color-silver-rank: #25282d;
+  --color-silver-border: #afb7c1;
+
+  --color-gold-text: #46390c;
+  --color-gold-rank: #4b3b0e;
+  --color-gold-border: #c7b051;
+
+  --color-diamond-text: #bfcc5c;
+  --color-diamond-rank: #bfcc5c;
+  --color-diamond-border: #bfcc5c;
+
+  --color-legend-text: #4f4715;
+  --color-legend-rank: #4f4715;
+  --color-legend-border: #4f4715;
 }
