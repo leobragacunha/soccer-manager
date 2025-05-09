@@ -17,7 +17,7 @@ const EditPlayer = () => {
   if (!playerId) return <div>Error: PLAYER NOT FOUND!!!</div>;
 
   const editPlayerMutation = useMutation({
-    mutationFn: (player: Player) => editPlayer(player, removePic),
+    mutationFn: (player: Player) => editPlayer(player),
     onSuccess: () => navigate("/players"),
     onError: (error) => console.error("Could not edit player", error),
   });
