@@ -1,8 +1,8 @@
 import { neon } from "@neondatabase/serverless";
-import { put, del } from "@vercel/blob";
+import { put } from "@vercel/blob";
 
 import {
-  removeBg,
+  // removeBg,
   shapeObjectForPost,
   shapeObjectForUpdate,
 } from "../utils/helpers";
@@ -95,10 +95,7 @@ export const createPlayer = async (player: Player): Promise<void> => {
   }
 };
 
-export const editPlayer = async (
-  player: Player,
-  removePic: boolean,
-): Promise<void> => {
+export const editPlayer = async (player: Player): Promise<void> => {
   // console.log(player);
   const { id, profilePic } = player;
   const { updateArray, valuesArray } = shapeObjectForUpdate(player);
