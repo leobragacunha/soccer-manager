@@ -5,15 +5,19 @@ import PlayerCard from "./PlayerCard";
 import PlayerForm from "./PlayerForm";
 import { Player } from "../../utils/typing";
 import { SubmitHandler } from "react-hook-form";
+import { useState } from "react";
 
 const EditPlayer = () => {
   const navigate = useNavigate();
   const { playerId } = useParams();
 
+  // Creating state for managing image removal.
+  const [removePic, setRemovePic] = useState(false);
+
   if (!playerId) return <div>Error: PLAYER NOT FOUND!!!</div>;
 
   const editPlayerMutation = useMutation({
-    mutationFn: (player: Player) => editPlayer(player),
+    mutationFn: (player: Player) => editPlayer(player, removePic),
     onSuccess: () => navigate("/players"),
     onError: (error) => console.error("Could not edit player", error),
   });
@@ -24,9 +28,10 @@ const EditPlayer = () => {
     onError: (error) => console.error("Error deleting player:", error),
   });
 
-  const onSubmit: SubmitHandler<Player> = (data) => {
+  const handleSubmitForm: SubmitHandler<Player> = (data) => {
     if (!data.profilePic?.[0]) delete data.profilePic;
-    if (data.removePic) data.imageurl = null;
+
+    if (removePic) data.imageurl = null;
     // console.log(data);
     editPlayerMutation.mutate(data);
   };
@@ -49,7 +54,12 @@ const EditPlayer = () => {
       {/* Container with info */}
       <div className="m-4 flex flex-1 gap-4 rounded-[5px] bg-neutral-300/70 p-4">
         <div className="self-center">
-          <PlayerForm player={player} onSubmit={onSubmit} />
+          <PlayerForm
+            player={player}
+            removePic={removePic}
+            setRemovePic={setRemovePic}
+            onSubmit={handleSubmitForm}
+          />
         </div>
         <div className="flex h-full flex-1 flex-col items-center justify-between">
           <div className="mt-20 scale-130">

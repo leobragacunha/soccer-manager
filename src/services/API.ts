@@ -83,7 +83,7 @@ export const createPlayer = async (player: Player): Promise<void> => {
 
     // Posting info in players table
     const sql = neon(`${API_URL}`);
-    const record = await sql.query(
+    await sql.query(
       `INSERT INTO players (${keysArray.join(",")}) VALUES (${sqlArray.join(",")})`,
       valuesArray,
     );
@@ -95,15 +95,10 @@ export const createPlayer = async (player: Player): Promise<void> => {
   }
 };
 
-export async function DELETE(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const urlToDelete = searchParams.get("url") as string;
-  await del(urlToDelete);
-
-  return new Response();
-}
-
-export const editPlayer = async (player: Player): Promise<void> => {
+export const editPlayer = async (
+  player: Player,
+  removePic: boolean,
+): Promise<void> => {
   // console.log(player);
   const { id, profilePic } = player;
   const { updateArray, valuesArray } = shapeObjectForUpdate(player);
@@ -166,7 +161,7 @@ export const editPlayer = async (player: Player): Promise<void> => {
 export const deletePlayer = async (id: string): Promise<void> => {
   try {
     const sql = neon(`${API_URL}`);
-    const data = await sql`DELETE FROM players WHERE id=${id}`;
+    await sql`DELETE FROM players WHERE id=${id}`;
     // console.log(data);
   } catch (error: unknown) {
     const errorMessage =

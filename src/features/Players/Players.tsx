@@ -17,6 +17,7 @@ const Players = () => {
   });
 
   if (isPending) return <div>Loading</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="flex h-screen flex-1 bg-[url(/fieldFromAboveBall.jpg)] bg-cover">

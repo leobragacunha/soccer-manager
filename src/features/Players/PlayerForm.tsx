@@ -4,9 +4,13 @@ import { Player } from "../../utils/typing";
 const PlayerForm = ({
   onSubmit,
   player,
+  removePic,
+  setRemovePic,
 }: {
   onSubmit: SubmitHandler<Player>;
   player?: Player;
+  removePic?: boolean;
+  setRemovePic?: (value: boolean) => void;
 }) => {
   // React-Hook-Form
   const {
@@ -31,7 +35,6 @@ const PlayerForm = ({
         },
   });
 
-  // console.log(player);
   const selectedFile = watch("profilePic");
 
   return (
@@ -243,7 +246,7 @@ const PlayerForm = ({
         value="legend"
         className="col-start-1 row-start-13 h-6"
         checked={player?.kind === "legend"}
-        {...register("isLegend")}
+        {...register("kind", { setValueAs: (value) => value && "legend" })}
       />
       <label htmlFor="isLegend" className="col-start-2 row-start-13">
         He is a legend!
@@ -272,7 +275,10 @@ const PlayerForm = ({
             type="checkbox"
             id="removePic"
             className="h-6 w-20"
-            {...register("removePic")}
+            checked={removePic}
+            onChange={(e) => {
+              setRemovePic && setRemovePic(e.target.checked);
+            }}
           />
           <label htmlFor="removePic">Remove Picture</label>
         </div>

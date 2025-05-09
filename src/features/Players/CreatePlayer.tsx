@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from "react-hook-form";
+import { SubmitHandler } from "react-hook-form";
 import { createPlayer } from "../../services/API";
 import { useMutation } from "@tanstack/react-query";
 import { Player } from "../../utils/typing";
@@ -19,7 +19,7 @@ const CreateEditPlayer = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<Player> = (data) => {
+  const handleSubmitForm: SubmitHandler<Player> = (data) => {
     // If there is no file submitted, we remove the attribute from formData
     if (!data.profilePic?.[0]) delete data.profilePic;
 
@@ -39,7 +39,7 @@ const CreateEditPlayer = () => {
         {/* Content */}
         <div className="flex flex-1">
           {/* Form */}
-          <PlayerForm onSubmit={onSubmit} />
+          <PlayerForm onSubmit={handleSubmitForm} />
           {/* Player Card */}
           <div className="flex-1"></div>
         </div>
