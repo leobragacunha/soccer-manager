@@ -3,7 +3,12 @@ import { Player } from "./typing";
 
 interface PostObject {
   keysArray: string[];
-  sqlArray: string[];
+  sqlArray?: string[];
+  valuesArray: (string | number)[];
+}
+
+interface UpdateObject {
+  updateArray: string[];
   valuesArray: (string | number)[];
 }
 
@@ -59,6 +64,52 @@ export const shapeObjectForPost = (player: Player): PostObject => {
   return {
     keysArray,
     sqlArray,
+    valuesArray,
+  };
+};
+
+export const shapeObjectForUpdate = (player: Player): UpdateObject => {
+  // Recalculating kind and rank, in case of grade changes
+  const rank = calculateRank(player);
+  let kind = "";
+
+  if (rank >= 90) {
+    kind = "diamond";
+  } else if (rank >= 80) {
+    kind = "gold";
+  } else if (rank >= 70) {
+    kind = "silver";
+  } else {
+    kind = "bronze";
+  }
+
+  if (player.isLegend) kind = "legend";
+
+  if (player.removePic) player.imageurl = null;
+  player.rank = rank;
+  player.kind = kind;
+
+  const entries = Object.entries(player).filter(
+    ([key, value]) => key !== "isLegend" && key !== "removePic",
+    // key !== "rank" &&
+    // key !== "kind" &&
+    // value !== undefined &&
+    // value !== null &&
+    // value !== "",
+  );
+
+  console.log("entries:", entries);
+
+  const updateArray = [
+    ...entries.map(
+      ([key, value], i) => `${key === "isLegend" ? "kind" : key} = $${i + 2}`,
+    ),
+  ]; // $1 will be for id, in the where clause
+
+  const valuesArray = [player.id, ...entries.map(([_, value]) => value)]; // Adjusting values array to use 'legend' or kind, depending on the value.
+
+  return {
+    updateArray,
     valuesArray,
   };
 };

@@ -3,7 +3,7 @@
     {
       "id": "fba28c09-3c15-4279-979e-3c5020c1295b",
       "name": "Leonardo Braga Cunha",
-      "nickName": "Teo Messi",
+      "nickname": "Teo Messi",
       "height": 169,
       "foot": "left",
       "speed": 60,
@@ -17,7 +17,7 @@
     {
       "id": "9c26c756-d8b8-455c-b134-6adc00654be1",
       "name": "Rafael Braga Cunha",
-      "nickName": "Rafonesz",
+      "nickname": "Rafonesz",
       "height": 169,
       "foot": "left",
       "speed": 70,
@@ -31,7 +31,7 @@
     {
       "id": "20f8",
       "name": "Test Player",
-      "nickName": "Test Nick",
+      "nickname": "Test Nick",
       "foot": "left",
       "height": "175",
       "speed": 50,
@@ -44,7 +44,7 @@
     {
       "id": "05b3",
       "name": "Test with pic",
-      "nickName": "tpic",
+      "nickname": "tpic",
       "foot": "both",
       "height": 175,
       "speed": 50,

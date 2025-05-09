@@ -6,6 +6,7 @@
 
 @import "./typography.css";
 @import "./card.css";
+@import "./variables.css";
 
 @layer base {
   body {

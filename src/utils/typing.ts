@@ -1,7 +1,7 @@
 export interface Player {
   id: string;
   name: string;
-  nickName: string;
+  nickname: string;
   height: number;
   foot: "left" | "right" | "both";
   speed: number;
@@ -14,10 +14,10 @@ export interface Player {
   rank: number;
   kind: string;
   profilePic?: FileList;
+  imageurl?: string | null;
 }
 
-// Creating a new interface to work with imageUrl instead of profilePic
-export interface PlayerFromDB extends Omit<Player, "profilePic" | "nickName"> {
-  imageurl?: string;
-  nickname: string; // nickName was modeled wrong. Just correcting since we need another interface anyway
+export interface PlayerCard {
+  player: Player;
+  onClick?: () => void | Promise<void>;
 }
