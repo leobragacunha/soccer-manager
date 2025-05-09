@@ -2,7 +2,7 @@ import { getPlayers } from "../../services/API";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import PlayerCard from "./PlayerCard";
-import { PlayerFromDB } from "../../utils/typing";
+import { Player } from "../../utils/typing";
 
 const Players = () => {
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ const Players = () => {
   });
 
   if (isPending) return <div>Loading</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="flex h-screen flex-1 bg-[url(/fieldFromAboveBall.jpg)] bg-cover">
@@ -34,8 +35,8 @@ const Players = () => {
 
         {/* Players section */}
         <ul className="flex flex-wrap gap-2">
-          {players.map((player: PlayerFromDB) => (
-            <li key={player.id}>
+          {players.map((player: Player) => (
+            <li key={player.id} onClick={() => navigate(`${player.id}`)}>
               <PlayerCard player={player} />
             </li>
           ))}

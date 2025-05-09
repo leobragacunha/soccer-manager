@@ -7,6 +7,11 @@ interface PostObject {
   valuesArray: (string | number)[];
 }
 
+interface UpdateObject {
+  updateArray: string[];
+  valuesArray: (string | number)[];
+}
+
 const calculateRank = (player: Player): number => {
   const { speed, stamina, pass, shoot, dribble, defense } = player;
 
@@ -41,7 +46,7 @@ export const shapeObjectForPost = (player: Player): PostObject => {
   }
 
   const entries = Object.entries(player).filter(
-    ([key, value]) => value !== undefined && value !== null && value !== "",
+    ([_, value]) => value !== undefined && value !== null && value !== "",
   );
 
   const keysArray = [
@@ -59,6 +64,41 @@ export const shapeObjectForPost = (player: Player): PostObject => {
   return {
     keysArray,
     sqlArray,
+    valuesArray,
+  };
+};
+
+export const shapeObjectForUpdate = (player: Player): UpdateObject => {
+  // Recalculating kind and rank, in case of grade changes
+  const rank = calculateRank(player);
+
+  if (player.kind !== "legend") {
+    if (rank >= 90) {
+      player.kind = "diamond";
+    } else if (rank >= 80) {
+      player.kind = "gold";
+    } else if (rank >= 70) {
+      player.kind = "silver";
+    } else {
+      player.kind = "bronze";
+    }
+  }
+
+  // if (player.removePic) player.imageurl = null;
+  player.rank = rank;
+
+  const entries = Object.entries(player).filter(
+    ([key, _]) => key !== "removePic",
+  );
+
+  console.log("entries:", entries);
+
+  const updateArray = [...entries.map(([key, _], i) => `${key} = $${i + 2}`)]; // $1 will be for id, in the where clause
+
+  const valuesArray = [player.id, ...entries.map(([_, value]) => value)]; // Adjusting values array to use 'legend' or kind, depending on the value.
+
+  return {
+    updateArray,
     valuesArray,
   };
 };
