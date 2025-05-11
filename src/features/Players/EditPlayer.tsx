@@ -1,4 +1,9 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import { deletePlayer, getSinglePlayer, editPlayer } from "../../services/API";
 import PlayerCard from "./PlayerCard";
@@ -6,35 +11,15 @@ import PlayerForm from "./PlayerForm";
 import { Player } from "../../utils/typing";
 import { SubmitHandler } from "react-hook-form";
 import { useState } from "react";
+import Spinner from "../../ui/Spinner";
 
 const EditPlayer = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { playerId } = useParams();
 
   // Creating state for managing image removal.
   const [removePic, setRemovePic] = useState(false);
-
-  if (!playerId) return <div>Error: PLAYER NOT FOUND!!!</div>;
-
-  const editPlayerMutation = useMutation({
-    mutationFn: (player: Player) => editPlayer(player),
-    onSuccess: () => navigate("/players"),
-    onError: (error) => console.error("Could not edit player", error),
-  });
-
-  const deletePlayerMutation = useMutation({
-    mutationFn: (id: string) => deletePlayer(id),
-    onSuccess: () => navigate("/players"),
-    onError: (error) => console.error("Error deleting player:", error),
-  });
-
-  const handleSubmitForm: SubmitHandler<Player> = (data) => {
-    if (!data.profilePic?.[0]) delete data.profilePic;
-
-    if (removePic) data.imageurl = null;
-    // console.log(data);
-    editPlayerMutation.mutate(data);
-  };
 
   const {
     data: player,
@@ -46,8 +31,33 @@ const EditPlayer = () => {
     enabled: !!playerId,
   });
 
-  if (isPending) return <div>Loading</div>;
+  const editPlayerMutation = useMutation({
+    mutationFn: ({ player }: { player: Player }) => editPlayer({ player }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["player", playerId] });
+      navigate("/players");
+    },
+    onError: (error) => console.error("Could not edit player", error),
+  });
+
+  const deletePlayerMutation = useMutation({
+    mutationFn: (id: string) => deletePlayer(id),
+    onSuccess: () => navigate("/players"),
+    onError: (error) => console.error("Error deleting player:", error),
+  });
+
+  const handleSubmitForm: SubmitHandler<Player> = (data) => {
+    if (!data.profilePic?.[0]) delete data.profilePic;
+    if (removePic) data.imageurl = null;
+
+    console.log("data send for mutation", data);
+    editPlayerMutation.mutate({ player: data });
+  };
+
+  if (isPending) return <Spinner />;
   if (error) return <div>Error:{error.message}</div>;
+
+  console.log("player", player);
 
   return (
     <div className="flex h-screen flex-1 overflow-hidden bg-[url(/ballNet.jpg)] bg-cover">
@@ -67,7 +77,7 @@ const EditPlayer = () => {
           </div>
           <button
             className="mb-16 rounded-[5px] border-2 border-green-800 px-6 py-3 text-green-800 transition-all duration-300 hover:border-0 hover:bg-red-700 hover:text-white"
-            onClick={() => deletePlayerMutation.mutate(playerId)}
+            onClick={() => deletePlayerMutation.mutate(playerId!)}
           >
             Delete
           </button>

@@ -51,6 +51,7 @@ const PlayerCard = ({ player }: PlayerCardInterface) => {
         src={image || "/noPhoto.png"}
         alt={`Photo of ${nickname || name}`}
       />
+
       <span className="col-1 col-span-4 row-6 space-y-1 self-center justify-self-center uppercase">
         {nickname}
       </span>

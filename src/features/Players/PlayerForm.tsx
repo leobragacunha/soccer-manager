@@ -1,5 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Player } from "../../utils/typing";
+import { useState } from "react";
 
 const PlayerForm = ({
   onSubmit,
@@ -32,6 +33,7 @@ const PlayerForm = ({
           shoot: 50,
           dribble: 50,
           defense: 50,
+          islegend: false,
         },
   });
 
@@ -240,15 +242,14 @@ const PlayerForm = ({
         {errors.defense?.message}
       </p>
 
+      {/* Leaving checkbox outside react-hook-form */}
       <input
         type="checkbox"
-        id="isLegend"
-        value="legend"
+        id="islegend"
         className="col-start-1 row-start-13 h-6"
-        checked={player?.kind === "legend"}
-        {...register("kind", { setValueAs: (value) => value && "legend" })}
+        {...register("islegend")}
       />
-      <label htmlFor="isLegend" className="col-start-2 row-start-13">
+      <label htmlFor="islegend" className="col-start-2 row-start-13">
         He is a legend!
       </label>
 

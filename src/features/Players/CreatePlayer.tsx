@@ -4,12 +4,14 @@ import { useMutation } from "@tanstack/react-query";
 import { Player } from "../../utils/typing";
 import { useNavigate } from "react-router";
 import PlayerForm from "./PlayerForm";
+import { useState } from "react";
 
 const CreateEditPlayer = () => {
+  // const [isLegend, setIsLegend] = useState(false);
   const navigate = useNavigate();
 
   const createPlayerMutation = useMutation({
-    mutationFn: (player: Player) => createPlayer(player),
+    mutationFn: ({ player }: { player: Player }) => createPlayer({ player }),
     onSuccess: () => {
       console.log("Mutation function ran ok!");
       navigate("/players");
@@ -25,7 +27,7 @@ const CreateEditPlayer = () => {
 
     // console.log(data);
 
-    createPlayerMutation.mutate(data);
+    createPlayerMutation.mutate({ player: data });
   };
 
   return (
@@ -39,7 +41,11 @@ const CreateEditPlayer = () => {
         {/* Content */}
         <div className="flex flex-1">
           {/* Form */}
-          <PlayerForm onSubmit={handleSubmitForm} />
+          <PlayerForm
+            onSubmit={handleSubmitForm}
+            // isLegend={isLegend}
+            // setIsLegend={setIsLegend}
+          />
           {/* Player Card */}
           <div className="flex-1"></div>
         </div>

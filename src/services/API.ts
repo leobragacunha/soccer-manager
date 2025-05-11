@@ -5,6 +5,7 @@ import {
   // removeBg,
   shapeObjectForPost,
   shapeObjectForUpdate,
+  uploadFile,
 } from "../utils/helpers";
 import { Player } from "../utils/typing";
 
@@ -29,7 +30,7 @@ export const getPlayers = async (): Promise<Player[]> => {
   }
 };
 
-export const getSinglePlayer = async (id: string): Promise<Player> => {
+export const getSinglePlayer = async (id?: string): Promise<Player> => {
   try {
     const sql = neon(`${API_URL}`);
     const data =
@@ -44,41 +45,22 @@ export const getSinglePlayer = async (id: string): Promise<Player> => {
   }
 };
 
-export const createPlayer = async (player: Player): Promise<void> => {
+export const createPlayer = async ({
+  player,
+}: {
+  player: Player;
+}): Promise<void> => {
   const { profilePic } = player;
   const { keysArray, sqlArray, valuesArray } = shapeObjectForPost(player);
-  const id = valuesArray[0];
-
-  if (!profilePic) return;
-
-  // Getting file extension to rename file
-  const dotIndex = profilePic && profilePic?.[0].name.lastIndexOf(".");
-
-  const fileName = profilePic && `${id}${profilePic?.[0].name.slice(dotIndex)}`;
-
-  const imageurl = `${BLOB_URL}/playerImages/${fileName}`;
-
-  if (profilePic) {
-    const lastIndex = keysArray.length - 1;
-    keysArray[lastIndex] = "imageurl";
-    valuesArray[lastIndex] = imageurl;
-  }
-
-  // console.log(keysArray, sqlArray, valuesArray);
 
   try {
-    // Uploading profile picture
+    // Uploading profile picture in Cloudinary
     if (profilePic?.[0]) {
-      // const profilePicNoBg = await removeBg(profilePic?.[0]); // reached API Limits (return in may 27th)
-
-      // await put(`playerImages/${fileName}`, profilePicNoBg, {
-      //   access: "public",
-      //   token: `${BLOB_TOKEN}`,
-      // });
-      await put(`playerImages/${fileName}`, profilePic?.[0], {
-        access: "public",
-        token: `${BLOB_TOKEN}`,
-      });
+      const { secure_url: imageurl } = await uploadFile(profilePic[0]);
+      const lastIndex = keysArray.length;
+      keysArray[lastIndex] = "imageurl";
+      sqlArray[lastIndex] = `$${lastIndex + 1}`; // +1 is because $1 is for id
+      valuesArray[lastIndex] = imageurl;
     }
 
     // Posting info in players table
@@ -95,51 +77,31 @@ export const createPlayer = async (player: Player): Promise<void> => {
   }
 };
 
-export const editPlayer = async (player: Player): Promise<void> => {
+export const editPlayer = async ({
+  player,
+}: {
+  player: Player;
+}): Promise<void> => {
   // console.log(player);
   const { id, profilePic } = player;
   const { updateArray, valuesArray } = shapeObjectForUpdate(player);
 
-  // Deleting old profilePic
-
-  // Getting file extension to rename file
-  const dotIndex = profilePic && profilePic?.[0].name.lastIndexOf(".");
-
-  const fileName = profilePic && `${id}${profilePic?.[0].name.slice(dotIndex)}`;
-
-  const imageurl = `${BLOB_URL}/playerImages/${fileName}`;
-
-  console.log(imageurl);
-
-  // await del(imageurl, { token: `${BLOB_TOKEN}` });
-  // console.log("CHEGUEI AQUI!");
-
-  if (profilePic) {
-    const lastIndex = updateArray.length;
-    updateArray[lastIndex] = `imageurl = $${updateArray.length + 1}`;
-    valuesArray[lastIndex] = imageurl;
-  }
-
-  console.log(updateArray, valuesArray);
+  // console.log(updateArray, valuesArray);
 
   try {
-    // Uploading profile picture
     if (profilePic?.[0]) {
-      // await del(imageurl, { token: `${BLOB_TOKEN}` });
-      // const profilePicNoBg = await removeBg(profilePic?.[0]);
-      // await put(`playerImages/${fileName}`, profilePicNoBg, {
-      //   access: "public",
-      //   token: `${BLOB_TOKEN}`,
-      //   allowOverwrite: true,
-      // });
-      await put(`playerImages/${fileName}`, profilePic?.[0], {
-        access: "public",
-        token: `${BLOB_TOKEN}`,
-        allowOverwrite: true,
-      });
+      const { secure_url: imageurl } = await uploadFile(profilePic[0]);
+      const lastIndex = updateArray.length - 1;
+      updateArray[lastIndex] = `imageurl = $${lastIndex + 1}`; // +1 is because $1 is for id
+      valuesArray[lastIndex] = imageurl;
     }
 
     // Posting info in players table
+    console.log(
+      "QUERY:" + `UPDATE players SET ${updateArray.join(",")} WHERE id=$1`,
+    );
+    console.log("VALUES:", valuesArray);
+
     const sql = neon(`${API_URL}`);
     await sql.query(
       `UPDATE players 

@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import PlayerCard from "./PlayerCard";
 import { Player } from "../../utils/typing";
+import Spinner from "../../ui/Spinner";
 
 const Players = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Players = () => {
     queryFn: getPlayers,
   });
 
-  if (isPending) return <div>Loading</div>;
+  if (isPending) return <Spinner />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
