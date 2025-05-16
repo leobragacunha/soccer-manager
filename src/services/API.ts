@@ -8,17 +8,32 @@ import {
   uploadFile,
 } from "../utils/helpers";
 import { Player } from "../utils/typing";
+import { useSearchParams } from "react-router";
 
 // IMPORTING ENV VARIABLE WITH VITE
 const API_URL = import.meta.env.VITE_DATABASE_URL;
-const BLOB_URL = import.meta.env.VITE_BLOB_BASE_URL;
-const BLOB_TOKEN = import.meta.env.VITE_BLOB_READ_WRITE_TOKEN;
 
 //Player Schema
-export const getPlayers = async (): Promise<Player[]> => {
+export const getPlayers = async (
+  searchString: string,
+  orderParam: "name" | "nickname" | "rank",
+  orderValue: "asc" | "desc",
+): Promise<Player[]> => {
   try {
     const sql = neon(`${API_URL}`);
-    const data = (await sql`SELECT * FROM players`) as Player[];
+    let query = `SELECT * FROM players`;
+    let params: string[] = [];
+
+    if (searchString) {
+      query += ` WHERE name ILIKE $1 OR nickname ILIKE $1`;
+      params = [`%${searchString}%`];
+    }
+
+    if (orderParam && orderValue) {
+      query += ` ORDER BY ${orderParam} ${orderValue === "asc" ? "ASC" : "DESC"}`;
+    }
+
+    const data = (await sql.query(query, params)) as Player[];
     // console.log(data);
 
     return data;
