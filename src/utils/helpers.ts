@@ -1,5 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
-import { CloudinaryResponse, Player, PostObject, UpdateObject } from "./typing";
+import {
+  CloudinaryResponse,
+  Player,
+  PostObject,
+  Team,
+  UpdateObject,
+} from "./typing";
 
 const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
@@ -170,4 +176,55 @@ export const uploadFile = async (file: File): Promise<CloudinaryResponse> => {
     console.error("Error during upload:", error);
     throw error;
   }
+};
+
+// Function for selecting a player for a team
+export const selectPlayerForTeam = (
+  selectedPlayers: Player[],
+  currentPlayer: Player,
+) => {
+  {
+    if (selectedPlayers.some((player) => currentPlayer.id === player.id)) {
+      return selectedPlayers.filter((player) => currentPlayer.id !== player.id);
+    }
+    return [...selectedPlayers, currentPlayer];
+  }
+};
+
+// Function for creating teams
+export const createTeams = (
+  playerArray: Player[],
+  teamsNumber: number,
+): Team[] => {
+  // 1) Create an array of teams
+  const teams = Array.from({ length: teamsNumber }, () => ({
+    players: [] as Player[],
+    averageRank: 0,
+  }));
+
+  // 2) Sort the players by rank (descending)
+  const sortedPlayers = [...playerArray].sort((a, b) => b.rank - a.rank);
+
+  // 3) Distribute players to teams (example: 3 teams, we will send the first player to team 1, the second to team 2, the third to team 3, the fourth to team 3 again, the fifth to team 2, and so on)
+  sortedPlayers.forEach((player, index) => {
+    const direction = Math.floor(index / teamsNumber);
+
+    if (direction % 2 === 0) {
+      teams[index % teamsNumber].players.push(player);
+    } else {
+      teams[teamsNumber - (index % teamsNumber) - 1].players.push(player);
+    }
+  });
+
+  // 4) Calculate the average rank for each team
+  teams.forEach(
+    (team) =>
+      (team.averageRank =
+        team.players.reduce(
+          (acc: number, player: Player) => acc + player.rank,
+          0,
+        ) / team.players.length),
+  );
+
+  return teams;
 };

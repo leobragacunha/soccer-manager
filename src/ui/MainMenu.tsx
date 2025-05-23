@@ -14,7 +14,7 @@ function MainMenu() {
 
       <button
         className="w-28 rounded-[5px] bg-green-800 p-4 text-white transition-colors duration-200 hover:bg-white hover:text-green-800"
-        onClick={() => navigate("/teams")}
+        onClick={() => navigate("/create-teams")}
       >
         Pick Teams
       </button>

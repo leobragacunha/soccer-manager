@@ -3,7 +3,7 @@ import { GiRunningShoe } from "react-icons/gi";
 import { IconContext } from "react-icons";
 import { PlayerCard as PlayerCardInterface } from "../../utils/typing";
 
-const PlayerCard = ({ player }: PlayerCardInterface) => {
+const PlayerCard = ({ player, isSelected }: PlayerCardInterface) => {
   const {
     name,
     nickname,
@@ -22,7 +22,7 @@ const PlayerCard = ({ player }: PlayerCardInterface) => {
 
   return (
     <div
-      className={`relative -mx-12 -my-4 grid h-80 w-80 grid-cols-[0.7fr_1fr_0.8fr_1fr] grid-rows-9 border-2 border-red-100 px-20 pt-14 pb-16 ${kind === "bronze" && "bg-[url(/cardBronze.png)] mask-[url(/cardBronze.png)] bg-contain bg-center bg-no-repeat mask-contain mask-center mask-no-repeat text-[var(--color-bronze-text)]"} ${kind === "silver" && "bg-[url(/cardSilver.png)] mask-[url(/cardSilver.png)] bg-contain bg-center bg-no-repeat mask-contain mask-center mask-no-repeat text-[var(--color-silver-text)]"} ${kind === "gold" && "bg-[url(/cardGold.png)] mask-[url(/cardGold.png)] bg-contain bg-center bg-no-repeat mask-contain mask-center mask-no-repeat text-[var(--color-gold-text)]"} ${kind === "diamond" && "bg-[url(/cardDiamond.png)] mask-[url(/cardDiamond.png)] bg-contain bg-center bg-no-repeat mask-contain mask-center mask-no-repeat text-[var(--color-diamond-text)]"} ${kind === "legend" && "bg-[url(/cardLegend.png)] mask-[url(/cardLegend.png)] bg-contain bg-center bg-no-repeat mask-contain mask-center mask-no-repeat text-[var(--color-legend-text)]"} `}
+      className={`relative -mx-12 -my-4 grid h-80 w-80 cursor-pointer grid-cols-[0.7fr_1fr_0.8fr_1fr] grid-rows-9 border-2 border-red-100 px-20 pt-14 pb-16 ${kind === "bronze" && "bg-[url(/cardBronze.png)] mask-[url(/cardBronze.png)] bg-contain bg-center bg-no-repeat mask-contain mask-center mask-no-repeat text-[var(--color-bronze-text)]"} ${kind === "silver" && "bg-[url(/cardSilver.png)] mask-[url(/cardSilver.png)] bg-contain bg-center bg-no-repeat mask-contain mask-center mask-no-repeat text-[var(--color-silver-text)]"} ${kind === "gold" && "bg-[url(/cardGold.png)] mask-[url(/cardGold.png)] bg-contain bg-center bg-no-repeat mask-contain mask-center mask-no-repeat text-[var(--color-gold-text)]"} ${kind === "diamond" && "bg-[url(/cardDiamond.png)] mask-[url(/cardDiamond.png)] bg-contain bg-center bg-no-repeat mask-contain mask-center mask-no-repeat text-[var(--color-diamond-text)]"} ${kind === "legend" && "bg-[url(/cardLegend.png)] mask-[url(/cardLegend.png)] bg-contain bg-center bg-no-repeat mask-contain mask-center mask-no-repeat text-[var(--color-legend-text)]"} ${isSelected ? "scale-110" : ""} `}
     >
       {/* lines separating grades */}
       <span

@@ -1,3 +1,5 @@
+import { Dispatch } from "react";
+
 export interface Player {
   id: string;
   name: string;
@@ -21,6 +23,7 @@ export interface Player {
 export interface PlayerCard {
   player: Player;
   onClick?: () => void | Promise<void>;
+  isSelected?: boolean;
 }
 
 export interface PostObject {
@@ -47,4 +50,30 @@ export interface CloudinaryResponse {
   width: number;
   height: number;
   url: string;
+}
+
+export interface TeamPickingForm {
+  teamsNumber: number;
+  playersPerTeam: number;
+}
+
+export interface Team {
+  players: Player[];
+  averageRank: number;
+}
+
+export interface TeamsContextType {
+  selectedPlayers: Player[];
+  teamsNumber: number;
+  dispatch: Dispatch<ActionType>;
+}
+
+export interface StateType {
+  selectedPlayers: Player[];
+  teamsNumber: number;
+}
+
+export interface ActionType {
+  type: string;
+  payload: Player[] | number;
 }

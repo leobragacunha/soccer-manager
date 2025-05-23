@@ -15,9 +15,9 @@ const API_URL = import.meta.env.VITE_DATABASE_URL;
 
 //Player Schema
 export const getPlayers = async (
-  searchString: string,
-  orderParam: "name" | "nickname" | "rank",
-  orderValue: "asc" | "desc",
+  searchString?: string,
+  orderParam?: "name" | "nickname" | "rank",
+  orderValue?: "asc" | "desc",
 ): Promise<Player[]> => {
   try {
     const sql = neon(`${API_URL}`);

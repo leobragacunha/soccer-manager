@@ -26,7 +26,7 @@ const Sidebar = () => {
           className={({ isActive }: { isActive: boolean }) =>
             `w-full p-4 transition-colors duration-300 hover:bg-green-800 hover:text-white ${isActive && "bg-green-800 text-white"}`
           }
-          to="teams"
+          to="create-teams"
         >
           Teams
         </NavLink>
